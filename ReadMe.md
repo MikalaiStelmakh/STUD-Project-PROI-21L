@@ -1,10 +1,10 @@
 Stelmakh Mikalai, 316951  
-Słomkowski Maciej,  
+Słomkowski Maciej, 304094  
 PROI, Semestr 21L
 
 # System do obsługi biblioteki - Dokumentacja Projektu
 # Zadanie
->Zadanie polega na zaprojektowaniu i zakodowaniu w C++ modelu dowolnego „systemu”, składającego się z obiektów należących przynajmniej do trzech klas (np. Element1, Element2 i Aplikacja).
+>Zadanie polega na zaprojektowaniu i zakodowaniu w C++ modelu dowolnego „systemu”, składającego się z obiektów należących przynajmniej do trzech klas (np. Element1, Element2 i Aplikacja). Jako temat wybraliśmy "bibliotekę". Nasz program ma na celu pomóc w obsłudze biblioteki- monitorować kto wypożyczył jaką książkę, status książki (czy jest na stanie), wczytywanie z pliku książek do wypożyczenia etc.
 >## Elementy języka C++
 >Zgodnie z powyższym opisem projekt musi uwzględniać następujące elementy języka C++:
 >* Dziedziczenie,
@@ -88,10 +88,10 @@ Title2  Author2 Year2   Area2   Type2   UserName/None
 ```
 # Podział pracy
 ## Mikalai Stelmakh
-* task1
-* task2
-* task3
+* Application.cpp/.h
+* LibraryLib.h
 ## Słomkowski Maciej
-* task1
-* task2
-* task3
+* LibraryLib.cpp
+* Testy jednostkowe
+## Wspólnie
+* Dokumentacja
