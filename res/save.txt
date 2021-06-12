@@ -1,0 +1,20 @@
+Users{
+mstelmakh
+532523
+
+asd
+123
+}
+Library{
+Title
+123123
+
+Encyclopedias:
+Title	Author	Year	Topic	mstelmakh
+
+Fictions:
+Title	Author	Year	Genre	mstelmakh
+
+Maps:
+Title	Author	Year	Area	Type	asd
+}
