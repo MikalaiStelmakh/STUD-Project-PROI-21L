@@ -29,44 +29,16 @@ void Application::run()
 						list_of_books();
 						std::cin >> choice;
 						system("CLS");
-						int size_of_encyclopedias = library.get_list_of_encyclopedias().size();
-						int size_of_fictions = library.get_list_of_fictions().size();
-						int size_of_maps = library.get_list_of_maps().size();
-						int list_of_books_size = size_of_encyclopedias + size_of_fictions + size_of_maps;
+						int list_of_books_size = library.get_list_of_books().size();
 						if (choice > 0 && choice <= list_of_books_size)
 						{
-							if (choice <= size_of_encyclopedias)
+							Book* book = library.get_list_of_books()[choice - 1].get();
+							book_menu("Remove book", book);
+							std::cin >> choice;
+							system("CLS");
+							if (choice == 1)
 							{
-								Encyclopedia* book = library.get_list_of_encyclopedias()[choice - 1].get();
-								book_menu("Remove book", book);
-								std::cin >> choice;
-								system("CLS");
-								if (choice == 1)
-								{
-									admin_remove_book(book);
-								}
-							}
-							else if (choice <= size_of_encyclopedias + size_of_fictions)
-							{
-								Fiction* book = library.get_list_of_fictions()[choice - size_of_encyclopedias - 1].get();
-								book_menu("Remove book", book);
-								std::cin >> choice;
-								system("CLS");
-								if (choice == 1)
-								{
-									admin_remove_book(book);
-								}
-							}
-							else if (choice <= list_of_books_size)
-							{
-								Map* book = library.get_list_of_maps()[choice - size_of_encyclopedias - size_of_fictions - 1].get();
-								book_menu("Remove book", book);
-								std::cin >> choice;
-								system("CLS");
-								if (choice == 1)
-								{
-									admin_remove_book(book);
-								}
+								admin_remove_book(book);
 							}
 						}
 					}
@@ -105,47 +77,19 @@ void Application::run()
 								{
 									while (choice != 0)
 									{
-										int size_of_encyclopedias = library.get_list_of_encyclopedias().size();
-										int size_of_fictions = library.get_list_of_fictions().size();
-										int size_of_maps = library.get_list_of_maps().size();
-										int list_of_books_size = size_of_encyclopedias + size_of_fictions + size_of_maps;
+										int list_of_books_size = library.get_list_of_books().size();
 										list_of_books();
 										std::cin >> choice;
 										system("CLS");
 										if (choice > 0 && choice <= list_of_books_size)
 										{
-											if (choice <= size_of_encyclopedias)
+											Book* book = library.get_list_of_books()[choice - 1].get();
+											book->get_status() ? book_menu("Issue book", book) : book_menu("", book);
+											std::cin >> choice;
+											system("CLS");
+											if (choice == 1 && book->get_status())
 											{
-												Encyclopedia* book = library.get_list_of_encyclopedias()[choice - 1].get();
-												book->get_status() ? book_menu("Issue book", book) : book_menu("", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1 && book->get_status())
-												{
-													user_issue_book(user, book);
-												}
-											}
-											else if (choice <= size_of_encyclopedias + size_of_fictions)
-											{
-												Fiction* book = library.get_list_of_fictions()[choice - size_of_encyclopedias - 1].get();
-												book->get_status() ? book_menu("Issue book", book) : book_menu("", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1 && book->get_status())
-												{
-													user_issue_book(user, book);
-												}
-											}
-											else if (choice <= list_of_books_size)
-											{
-												Map* book = library.get_list_of_maps()[choice - size_of_encyclopedias - size_of_fictions - 1].get();
-												book->get_status() ? book_menu("Issue book", book) : book_menu("", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1 && book->get_status())
-												{
-													user_issue_book(user, book);
-												}
+												user_issue_book(user, book);
 											}
 										}
 									}
@@ -155,50 +99,19 @@ void Application::run()
 								{
 									while (choice != 0)
 									{
-										int size_of_encyclopedias = user->get_issued_encyclopedias().size();
-										int size_of_fictions = user->get_issued_fictions().size();
-										int size_of_maps = user->get_issued_maps().size();
-										int list_of_books_size = size_of_encyclopedias + size_of_fictions + size_of_maps;
+										int list_of_books_size = user->get_issued_books().size();
 										user_list_of_issued_books(user);
 										std::cin >> choice;
 										system("CLS");
 										if (choice > 0 && choice <= list_of_books_size)
 										{
-											if (choice <= size_of_encyclopedias)
+											Book* book = user->get_issued_books()[choice - 1].get();
+											book_menu("Return book", book);
+											std::cin >> choice;
+											system("CLS");
+											if (choice == 1)
 											{
-												Encyclopedia* book = 
-													library.get_list_of_encyclopedias()[choice - 1].get();
-												book_menu("Return book", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1)
-												{
-													user_return_book(user, book);
-												}
-											}
-											else if (choice <= size_of_encyclopedias + size_of_fictions)
-											{
-												Fiction* book = 
-													library.get_list_of_fictions()[choice - size_of_encyclopedias - 1].get();
-												book_menu("Return book", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1)
-												{
-													user_return_book(user, book);
-												}
-											}
-											else if (choice <= list_of_books_size)
-											{
-												Map* book = 
-													library.get_list_of_maps()[choice - size_of_encyclopedias - size_of_fictions - 1].get();
-												book_menu("Return book", book);
-												std::cin >> choice;
-												system("CLS");
-												if (choice == 1)
-												{
-													user_return_book(user, book);
-												}
+												user_return_book(user, book);
 											}
 										}
 										
@@ -415,25 +328,28 @@ void Application::write_to_file(std::string path)
 	}
 	file << "}\nLibrary{\n" << library.get_name() << "\n" << library.get_phone() << "\n";
 	file << "\nEncyclopedias:\n";
-	for (auto it = library.get_list_of_encyclopedias().begin(); it != library.get_list_of_encyclopedias().end(); ++it)
+	for (auto it = library.get_list_of_books().begin(); it != library.get_list_of_books().end(); ++it)
 	{
-		file << (*it)->get_name() << "\t" << (*it)->get_author() << "\t" << (*it)->get_year() << "\t"
-			<< (*it)->get_topic() << "\t"
-			<< ((*it)->get_user()? (*it)->get_user()->get_name():"None") << "\n";
+		if ((*it)->book_type() == "Encyclopedia")
+		{
+			file << (*it)->info_to_write() << "\n";
+		}
 	}
 	file << "\nFictions:\n";
-	for (auto it = library.get_list_of_fictions().begin(); it != library.get_list_of_fictions().end(); ++it)
+	for (auto it = library.get_list_of_books().begin(); it != library.get_list_of_books().end(); ++it)
 	{
-		file << (*it)->get_name() << "\t" << (*it)->get_author() << "\t" << (*it)->get_year() << "\t"
-			<< (*it)->get_genre() << "\t"
-			<< ((*it)->get_user() ? (*it)->get_user()->get_name() : "None") << "\n";
+		if ((*it)->book_type() == "Fiction")
+		{
+			file << (*it)->info_to_write() << "\n";
+		}
 	}
 	file << "\nMaps:\n";
-	for (auto it = library.get_list_of_maps().begin(); it != library.get_list_of_maps().end(); ++it)
+	for (auto it = library.get_list_of_books().begin(); it != library.get_list_of_books().end(); ++it)
 	{
-		file << (*it)->get_name() << "\t" << (*it)->get_author() << "\t" << (*it)->get_year() << "\t"
-			<< (*it)->get_area() << "\t" << (*it)->get_type() << "\t"
-			<< ((*it)->get_user() ? (*it)->get_user()->get_name() : "None") << "\n";
+		if ((*it)->book_type() == "Map")
+		{
+			file << (*it)->info_to_write() << "\n";
+		}
 	}
 	file << "}";
 }
@@ -469,25 +385,12 @@ void Application::list_of_books()
 	std::cout << std::left << std::setw(4) << "id" << std::setw(20) << "Name"
 		<< std::setw(20) << "Type" << std::setw(20) << "Available" << std::endl;
 	int i = 0;
-	for (auto it = library.get_list_of_encyclopedias().begin(); it != library.get_list_of_encyclopedias().end(); ++it) {
+	for (auto it = library.get_list_of_books().begin(); it != library.get_list_of_books().end(); ++it)
+	{
 		std::cout
 			<< std::left << std::setw(4) << std::to_string(++i) + "."
 			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Encyclopedia"
-			<< std::setw(20) << ((*it)->get_status() ? "Yes" : "No") << std::endl;
-	}
-	for (auto it = library.get_list_of_fictions().begin(); it != library.get_list_of_fictions().end(); ++it) {
-		std::cout
-			<< std::left << std::setw(4) << std::to_string(++i) + "."
-			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Fiction"
-			<< std::setw(20) << ((*it)->get_status() ? "Yes" : "No") << std::endl;
-	}
-	for (auto it = library.get_list_of_maps().begin(); it != library.get_list_of_maps().end(); ++it) {
-		std::cout
-			<< std::left << std::setw(4) << std::to_string(++i) + "."
-			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Map"
+			<< std::setw(20) << (*it)->book_type()
 			<< std::setw(20) << ((*it)->get_status() ? "Yes" : "No") << std::endl;
 	}
 	std::cout << "\n0. Back to " << library.get_name() << " Admin Panel.\n";
@@ -615,26 +518,12 @@ void Application::user_list_of_issued_books(User* user)
 	std::cout << std::left << std::setw(4) << "id" << std::setw(20) << "Name"
 		<< std::setw(20) << "Type" << std::endl;
 	int i = 0;
-	for (auto it = user->get_issued_encyclopedias().begin(); it != user->get_issued_encyclopedias().end(); ++it)
+	for (auto it = user->get_issued_books().begin(); it != user->get_issued_books().end(); ++it)
 	{
 		std::cout
 			<< std::left << std::setw(4) << std::to_string(++i) + ". "
 			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Encyclopedia" << std::endl;
-	}
-	for (auto it = user->get_issued_fictions().begin(); it != user->get_issued_fictions().end(); ++it)
-	{
-		std::cout
-			<< std::left << std::setw(4) << std::to_string(++i) + ". "
-			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Fiction" << std::endl;
-	}
-	for (auto it = user->get_issued_maps().begin(); it != user->get_issued_maps().end(); ++it)
-	{
-		std::cout
-			<< std::left << std::setw(4) << std::to_string(++i) + ". "
-			<< std::setw(20) << (*it)->get_name()
-			<< std::setw(20) << "Map" << std::endl;
+			<< std::setw(20) << (*it)->book_type() << std::endl;
 	}
 	std::cout << "\n0. Back to " << user->get_name() << std::endl
 		<< "Select one option: ";
@@ -642,8 +531,7 @@ void Application::user_list_of_issued_books(User* user)
 
 void Application::remove_user(User* user)
 {
-	if (user->get_issued_encyclopedias().size() || user->get_issued_fictions().size()
-		|| user->get_issued_maps().size())
+	if (!user->get_issued_books().empty())
 	{
 		std::cout << "Cannot be deleted until all books have been returned.\n";
 	}
