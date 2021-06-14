@@ -64,7 +64,10 @@ public:
 	void set_year(std::string new_year);
 	void set_user(User* _user);
 
+	virtual std::string book_type() = 0;
 	virtual std::string info() = 0;
+	virtual std::string info_to_write() = 0;
+
 	bool operator==(Book& other);
 	void change_status();
 };
@@ -80,7 +83,9 @@ public:
 	void set_topic(std::string new_topic);
 	friend std::string info(Encyclopedia* encyclopedia);
 
+	std::string book_type();
 	std::string info();
+	std::string info_to_write();
 };
 
 class Fiction : public Book
@@ -95,7 +100,10 @@ public:
 	void set_genre(std::string new_genre);
 
 	friend std::string info(Fiction* fiction);
+
+	std::string book_type();
 	std::string info();
+	std::string info_to_write();
 };
 
 class Map : public Book
@@ -113,16 +121,17 @@ public:
 	void set_type(std::string new_type);
 
 	friend std::string info(Map* map);
+
+	std::string book_type();
 	std::string info();
+	std::string info_to_write();
 };
 
 class Library
 {
 private:
 	std::string name;
-	std::vector<std::unique_ptr<Encyclopedia>> list_of_encyclopedias;
-	std::vector<std::unique_ptr<Fiction>> list_of_fictions;
-	std::vector<std::unique_ptr<Map>> list_of_maps;
+	std::vector<std::unique_ptr<Book>> list_of_books;
 	std::string phone;
 	Library() {};
 public:
@@ -132,22 +141,17 @@ public:
 	~Library();
 
 	std::string get_name();
-	std::vector<std::unique_ptr<Encyclopedia>>& get_list_of_encyclopedias();
-	std::vector<std::unique_ptr<Fiction>>& get_list_of_fictions();
-	std::vector<std::unique_ptr<Map>>& get_list_of_maps();
+	std::vector<std::unique_ptr<Book>>& get_list_of_books();
 	std::string get_phone();
 
 	void set_name(std::string new_name);
 	void set_phone(std::string new_phone);
 
-	void add_book(Encyclopedia* encyclopedia);
-	void add_book(Fiction* fiction);
-	void add_book(Map* map);
+	void add_book(Book* book);
 
 	bool operator==(Library other);
-	void remove_book(Encyclopedia* encyclopedia);
-	void remove_book(Fiction* fiction);
-	void remove_book(Map* map);
+	void remove_book(Book* book);
+
 };
 
 class User
@@ -155,37 +159,27 @@ class User
 private:
 	std::string name;
 	std::string phone;
-	std::vector<std::unique_ptr<Encyclopedia>> issued_encyclopedias;
-	std::vector<std::unique_ptr<Fiction>> issued_fictions;
-	std::vector<std::unique_ptr<Map>> issued_maps;
+	std::vector<std::unique_ptr<Book>> issued_books;
 public:
 	User() {};
 	User(std::string Name, std::string Phone);
 	friend std::string info(User* user);
 	~User() {
-		issued_encyclopedias.clear();
-		issued_fictions.clear();
-		issued_maps.clear();
+		issued_books.clear();
 	};
 
 	std::string get_name();
 	std::string get_phone();
 
-	std::vector<std::unique_ptr<Encyclopedia>>& get_issued_encyclopedias();
-	std::vector<std::unique_ptr<Fiction>>& get_issued_fictions();
-	std::vector<std::unique_ptr<Map>>& get_issued_maps();
-	
+	std::vector<std::unique_ptr<Book>>& get_issued_books();
+
 	void set_name(std::string new_name);
 	void set_phone(std::string new_phone);
 
-	void issue_book(Encyclopedia* encyclopedia);
-	void issue_book(Fiction* fiction);
-	void issue_book(Map* map);
-	
-	void return_book(Encyclopedia* encyclopedia);
-	void return_book(Fiction* fiction);
-	void return_book(Map* map);
+	void issue_book(Book* book);
 
+	
+	void return_book(Book* book);
 };
 
 std::string info(Library* library);
