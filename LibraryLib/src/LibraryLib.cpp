@@ -87,12 +87,22 @@ void Encyclopedia::set_topic(std::string new_topic)
 	topic = new_topic;
 }
 
+std::string Encyclopedia::book_type()
+{
+	return "Encyclopedia";
+}
+
 std::string Encyclopedia::info()
 {
 	return ("Title: " + title + "\nAuthor: " + author + "\nYear of issue: " + year +
 		"\nTopic: " + topic);
 }
 
+std::string Encyclopedia::info_to_write()
+{
+	return (title + "\t" + author + "\t" + year + "\t"
+		+ topic + "\t" + (user? user->get_name():"None"));
+}
 
 
 
@@ -109,11 +119,21 @@ void Fiction::set_genre(std::string new_genre)
 	genre = new_genre;
 }
 
+std::string Fiction::book_type()
+{
+	return "Fiction";
+}
+
 std::string Fiction::info()
 {
 	return ("Genre: " + genre + "\nTitle: " + title + "\nAuthor: " + author + "\nYear of issue: " + year);
 }
 
+std::string Fiction::info_to_write()
+{
+	return (title + "\t" + author + "\t" + year + "\t"
+		+ genre + "\t" + (user ? user->get_name() : "None"));
+}
 
 
 
@@ -140,10 +160,21 @@ void Map::set_type(std::string new_type)
 	type = new_type;
 }
 
+std::string Map::book_type()
+{
+	return "Map";
+}
+
 std::string Map::info()
 {
 	return ("Title: " + title + "\nAuthor: " + author + "\nYear of issue: " + year +
-		"\Area: " + area + "\nType: " + type);
+		"\nArea: " + area + "\nType: " + type);
+}
+
+std::string Map::info_to_write()
+{
+	return (title + "\t" + author + "\t" + year + "\t" 
+		+ area + "\t" + type + "\t" + (user ? user->get_name() : "None"));
 }
 
 
@@ -160,19 +191,9 @@ std::string Library::get_name()
 	return name;
 }
 
-std::vector<std::unique_ptr<Encyclopedia>>& Library::get_list_of_encyclopedias()
+std::vector<std::unique_ptr<Book>>& Library::get_list_of_books()
 {
-	return list_of_encyclopedias;
-}
-
-std::vector<std::unique_ptr<Fiction>>& Library::get_list_of_fictions()
-{
-	return list_of_fictions;
-}
-
-std::vector<std::unique_ptr<Map>>& Library::get_list_of_maps()
-{
-	return list_of_maps;
+	return list_of_books;
 }
 
 std::string Library::get_phone()
@@ -191,68 +212,34 @@ void Library::set_phone(std::string new_phone)
 }
 
 Library::~Library() {
-	list_of_encyclopedias.clear();
-	list_of_fictions.clear();
-	list_of_maps.clear();
+	list_of_books.clear();
 }
 
 bool Library::operator==(Library other)
 {
 	return
-		name == other.name && list_of_encyclopedias == other.list_of_encyclopedias
-		&& list_of_fictions == other.list_of_fictions && list_of_maps == other.list_of_maps
+		name == other.name && list_of_books == other.list_of_books
 		&& phone == other.phone;
 }
 
-void Library::add_book(Encyclopedia* encyclopedia)
+void Library::add_book(Book* book)
 {
-	list_of_encyclopedias.emplace_back(encyclopedia);
+	list_of_books.emplace_back(book);
 }
 
-void Library::add_book(Fiction* fiction)
-{
-	list_of_fictions.emplace_back(fiction);
-}
 
-void Library::add_book(Map* map)
-{
-	list_of_maps.emplace_back(map);
-}
 
-void Library::remove_book(Encyclopedia* encyclopedia)
+void Library::remove_book(Book* book)
 {
 
-	for (int i = 0; i < list_of_encyclopedias.size(); ++i) {
-		if (list_of_encyclopedias[i].get() == encyclopedia)
+	for (int i = 0; i < list_of_books.size(); ++i) {
+		if (list_of_books[i].get() == book)
 		{
-			list_of_encyclopedias[i].release();
-			list_of_encyclopedias.erase(list_of_encyclopedias.begin() + i);
+			list_of_books[i].release();
+			list_of_books.erase(list_of_books.begin() + i);
 		}
 	}
 }
-
-void Library::remove_book(Fiction* fiction)
-{
-	for (int i = 0; i < list_of_fictions.size(); ++i) {
-		if (list_of_fictions[i].get() == fiction)
-		{
-			list_of_fictions[i].release();
-			list_of_fictions.erase(list_of_fictions.begin() + i);
-		}
-	}
-}
-
-void Library::remove_book(Map* map)
-{
-	for (int i = 0; i < list_of_maps.size(); ++i) {
-		if (list_of_maps[i].get() == map)
-		{
-			list_of_maps[i].release();
-			list_of_maps.erase(list_of_maps.begin() + i);
-		}
-	}
-}
-
 
 
 User::User(std::string Name, std::string Phone) : name(Name), phone(Phone) {};
@@ -277,83 +264,30 @@ void User::set_phone(std::string new_phone)
 	phone = new_phone;
 }
 
-std::vector<std::unique_ptr<Encyclopedia>>& User::get_issued_encyclopedias()
+std::vector<std::unique_ptr<Book>>& User::get_issued_books()
 {
-	return issued_encyclopedias;
+	return issued_books;
 }
 
-std::vector<std::unique_ptr<Fiction>>& User::get_issued_fictions()
+void User::issue_book(Book* book)
 {
-	return issued_fictions;
+	book->change_status();
+	book->set_user(this);
+	issued_books.emplace_back(book);
 }
 
-std::vector<std::unique_ptr<Map>>& User::get_issued_maps()
+void User::return_book(Book* book)
 {
-	return issued_maps;
-}
-
-void User::issue_book(Encyclopedia* encyclopedia)
-{
-	encyclopedia->change_status();
-	encyclopedia->set_user(this);
-	issued_encyclopedias.emplace_back(encyclopedia);
-}
-
-void User::issue_book(Fiction* fiction)
-{
-	fiction->change_status();
-	fiction->set_user(this);
-	issued_fictions.emplace_back(fiction);
-}
-
-void User::issue_book(Map* map)
-{
-	map->change_status();
-	map->set_user(this);
-	issued_maps.emplace_back(map);
-}
-
-void User::return_book(Encyclopedia* encyclopedia)
-{
-	for (int i = 0; i < issued_encyclopedias.size(); ++i) {
-		if (issued_encyclopedias[i].get() == encyclopedia)
+	for (int i = 0; i < issued_books.size(); ++i) {
+		if (issued_books[i].get() == book)
 		{
-			issued_encyclopedias[i].release();
-			issued_encyclopedias.erase(issued_encyclopedias.begin() + i);
+			issued_books[i].release();
+			issued_books.erase(issued_books.begin() + i);
 		}
 	}
-	encyclopedia->change_status();
-	encyclopedia->set_user(nullptr);
+	book->change_status();
+	book->set_user(nullptr);
 }
-
-void User::return_book(Fiction* fiction)
-{
-	for (int i = 0; i < issued_fictions.size(); ++i) {
-		if (issued_fictions[i].get() == fiction)
-		{
-			issued_fictions[i].release();
-			issued_fictions.erase(issued_fictions.begin() + i);
-		}
-	}
-	fiction->change_status();
-	fiction->set_user(nullptr);
-}
-
-void User::return_book(Map* map)
-{
-	for (int i = 0; i < issued_maps.size(); ++i) {
-		if (issued_maps[i].get() == map)
-		{
-			issued_maps[i].release();
-			issued_maps.erase(issued_maps.begin() + i);
-		}
-	}
-	map->change_status();
-	map->set_user(nullptr);
-}
-
-
-
 
 
 std::string info(Library* library)
