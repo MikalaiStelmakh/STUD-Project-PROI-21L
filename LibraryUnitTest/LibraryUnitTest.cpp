@@ -252,7 +252,7 @@ namespace LibraryUnitTest
 			std::string topic = "Animals";
 			Encyclopedia* encyclopedia = new Encyclopedia(title, author, year, &library, topic);
 			library.add_book(encyclopedia);
-			library.get_list_of_encyclopedias().clear();
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_get_list_of_encyclopedias)
 		{
@@ -263,8 +263,8 @@ namespace LibraryUnitTest
 			std::string topic = "Animals";
 			Encyclopedia* encyclopedia = new Encyclopedia(title, author, year, &library, topic);
 			library.add_book(encyclopedia);
-			Assert::IsTrue(library.get_list_of_encyclopedias()[0].get() == encyclopedia);
-			library.get_list_of_encyclopedias().clear();
+			Assert::IsTrue(library.get_list_of_books()[0].get() == encyclopedia);
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_remove_encyclopedia)
 		{
@@ -285,7 +285,7 @@ namespace LibraryUnitTest
 			std::string author = "Someone";
 			std::string year = "1999";
 			library.add_book(new Fiction(title, author, year, &library, genre));
-			library.get_list_of_fictions().clear();
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_get_list_of_fictions)
 		{
@@ -296,8 +296,8 @@ namespace LibraryUnitTest
 			std::string year = "1999";
 			Fiction* fiction = new Fiction(title, author, year, &library, genre);
 			library.add_book(fiction);
-			Assert::IsTrue(library.get_list_of_fictions()[0].get() == fiction);
-			library.get_list_of_fictions().clear();
+			Assert::IsTrue(library.get_list_of_books()[0].get() == fiction);
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_remove_fiction)
 		{
@@ -309,7 +309,7 @@ namespace LibraryUnitTest
 			Fiction* fiction = new Fiction(title, author, year, &library, genre);
 			library.add_book(fiction);
 			library.remove_book(fiction);
-			Assert::IsTrue(library.get_list_of_fictions().empty());
+			Assert::IsTrue(library.get_list_of_books().empty());
 		}
 		TEST_METHOD(library_add_map)
 		{
@@ -320,7 +320,7 @@ namespace LibraryUnitTest
 			std::string area = "Warsaw";
 			std::string type = "Road";
 			library.add_book(new Map(title, author, year, &library, area, type));
-			library.get_list_of_maps().clear();
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_get_list_of_maps)
 		{
@@ -332,8 +332,8 @@ namespace LibraryUnitTest
 			std::string type = "Road";
 			Map* map = new Map(title, author, year, &library, area, type);
 			library.add_book(map);
-			Assert::IsTrue(library.get_list_of_maps()[0].get() == map);
-			library.get_list_of_maps().clear();
+			Assert::IsTrue(library.get_list_of_books()[0].get() == map);
+			library.get_list_of_books().clear();
 		}
 		TEST_METHOD(library_remove_map)
 		{
@@ -346,7 +346,7 @@ namespace LibraryUnitTest
 			Map* map = new Map(title, author, year, &library, area, type);
 			library.add_book(map);
 			library.remove_book(map);
-			Assert::IsTrue(library.get_list_of_maps().empty());
+			Assert::IsTrue(library.get_list_of_books().empty());
 		}
 		TEST_METHOD(library_info)
 		{
@@ -417,7 +417,7 @@ namespace LibraryUnitTest
 			Encyclopedia* encyclopedia = new Encyclopedia(title, author, year, &library, topic);
 			library.add_book(encyclopedia);
 			user.issue_book(encyclopedia);
-			Assert::IsTrue(encyclopedia == user.get_issued_encyclopedias()[0].get());
+			Assert::IsTrue(encyclopedia == user.get_issued_books()[0].get());
 		}
 		TEST_METHOD(user_return_encyclopedia)
 		{
@@ -433,7 +433,7 @@ namespace LibraryUnitTest
 			user.issue_book(encyclopedia);
 			Assert::IsFalse(encyclopedia->get_status());
 			user.return_book(encyclopedia);
-			Assert::IsTrue(user.get_issued_encyclopedias().empty());
+			Assert::IsTrue(user.get_issued_books().empty());
 			Assert::IsTrue(encyclopedia->get_status());
 		}
 		TEST_METHOD(user_issue_fiction)
@@ -461,7 +461,7 @@ namespace LibraryUnitTest
 			Fiction* fiction = new Fiction(title, author, year, &library, genre);
 			library.add_book(fiction);
 			user.issue_book(fiction);
-			Assert::IsTrue(fiction == user.get_issued_fictions()[0].get());
+			Assert::IsTrue(fiction == user.get_issued_books()[0].get());
 		}
 		TEST_METHOD(user_return_fiction)
 		{
@@ -477,7 +477,7 @@ namespace LibraryUnitTest
 			user.issue_book(fiction);
 			Assert::IsFalse(fiction->get_status());
 			user.return_book(fiction);
-			Assert::IsTrue(user.get_issued_fictions().empty());
+			Assert::IsTrue(user.get_issued_books().empty());
 			Assert::IsTrue(fiction->get_status());
 		}
 		TEST_METHOD(user_issue_map)
@@ -507,7 +507,7 @@ namespace LibraryUnitTest
 			Map* map = new Map(title, author, year, &library, area, type);
 			library.add_book(map);
 			user.issue_book(map);
-			Assert::IsTrue(map == user.get_issued_maps()[0].get());
+			Assert::IsTrue(map == user.get_issued_books()[0].get());
 		}
 		TEST_METHOD(user_return_map)
 		{
@@ -524,7 +524,7 @@ namespace LibraryUnitTest
 			user.issue_book(map);
 			Assert::IsFalse(map->get_status());
 			user.return_book(map);
-			Assert::IsTrue(user.get_issued_maps().empty());
+			Assert::IsTrue(user.get_issued_books().empty());
 			Assert::IsTrue(map->get_status());
 		}
 		TEST_METHOD(user_info)
